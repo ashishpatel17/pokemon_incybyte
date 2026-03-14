@@ -6,10 +6,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Container>
-        <Typography variant="h4" sx={{ mb: 4 }}>
-          React MUI Project
-        </Typography>
-
+       
         <Routes>
           <Route path="/" element={<PokemonList />} />
         </Routes>
