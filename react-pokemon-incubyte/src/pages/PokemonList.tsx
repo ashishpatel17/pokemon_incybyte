@@ -53,7 +53,7 @@ export default function PokemonList() {
   }, [dispatch]);
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg" disableGutters>
       <AppBar position="sticky" color="primary">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

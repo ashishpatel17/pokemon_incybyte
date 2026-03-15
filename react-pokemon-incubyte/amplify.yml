@@ -1,0 +1,17 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd react-pokemon-incubyte
+        - npm install
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: react-pokemon-incubyte/dist
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - react-pokemon-incubyte/node_modules/**/*
