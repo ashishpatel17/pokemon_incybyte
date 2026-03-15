@@ -10,9 +10,7 @@ export default function App() {
        
         <Routes>
           <Route path="/" element={<PokemonList />} />
-        </Routes>
-        <Routes>
-          <Route path="/detail/:id" element={<PokemonDetail />} />
+          <Route path="/detail/:pokemonId" element={<PokemonDetail />} />
         </Routes>
 
       </Container>

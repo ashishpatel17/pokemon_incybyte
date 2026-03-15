@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { vi, describe, test, expect, beforeEach } from "vitest";
 import PokemonDetail from "./PokemonDetail";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 
 const mockCharmeleon = {
   id: 5,
@@ -55,11 +56,11 @@ const mockCharmeleon = {
   species: { name: "charmeleon", url: "" },
 };
 
-function makeStore(selected: any = null) {
+function makeStore(detail: any = null) {
   return configureStore({
     reducer: {
       pokemon: () => ({
-        selected,
+        detail,
         list: [],
         loading: false,
         count: 0,
@@ -69,12 +70,16 @@ function makeStore(selected: any = null) {
   });
 }
 
-function renderWithStore(selected: any = null) {
-  const store = makeStore(selected);
+function renderWithStore(detail: any = null) {
+  const store = makeStore(detail);
   return render(
-    <Provider store={store}>
-      <PokemonDetail />
-    </Provider>,
+    <MemoryRouter initialEntries={["/detail/5"]}>
+      <Provider store={store}>
+        <Routes>
+          <Route path="/detail/:pokemonId" element={<PokemonDetail />} />
+        </Routes>
+      </Provider>
+    </MemoryRouter>,
   );
 }
 
