@@ -10,6 +10,8 @@ import {
   Avatar,
   IconButton,
   CircularProgress,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowBack from "@mui/icons-material/ArrowBack";
@@ -18,7 +20,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchPokemonDetail } from "../services/api";
 import type { RootState, AppDispatch } from "../state/store";
 import { TYPE_COLORS, STAT_COLORS, STAT_LABELS } from "../types/TypesCommon";
-
 
 export default function PokemonDetail() {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +38,14 @@ export default function PokemonDetail() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "200px",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -68,9 +76,9 @@ export default function PokemonDetail() {
   return (
     <Box
       sx={{
-        maxWidth: 600,
+        maxWidth: { xs: "100%", sm: "100%", md: "100%", lg: 600 },
         mx: "auto",
-        mt: 3,
+        mt: 0,
         mb: 4,
         borderRadius: 3,
         border: "0.5px solid",
@@ -79,6 +87,24 @@ export default function PokemonDetail() {
         overflow: "hidden",
       }}
     >
+      <AppBar position="sticky" color="primary">
+        <Toolbar>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{
+              flexGrow: 1,
+              textTransform: "capitalize",
+              fontSize: { xs: "1rem", sm: "1.125rem", lg: "1.25rem" },
+            }}
+          >
+            {pokemon.name}
+          </Typography>
+          <IconButton color="inherit" edge="end" onClick={() => navigate("/")}>
+            <ArrowBack />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
       {/* Header */}
       <Box
         sx={{
@@ -98,22 +124,31 @@ export default function PokemonDetail() {
           variant="rounded"
         />
         <Box sx={{ flex: 1 }}>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 0.5 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              mb: 0.5,
+            }}
+          >
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Typography
                 variant="h6"
                 fontWeight={500}
                 textTransform="capitalize"
+                sx={{ fontSize: { xs: "1rem", sm: "1.125rem", lg: "1.25rem" } }}
               >
                 {pokemon.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem", lg: "0.95rem" } }}
+              >
                 #{pokemon.id}
               </Typography>
             </Box>
-            <IconButton onClick={() => navigate('/')}>
-              <ArrowBack />
-            </IconButton>
           </Box>
 
           {/* Types */}
@@ -133,8 +168,8 @@ export default function PokemonDetail() {
                     bgcolor: colors.bg,
                     color: colors.text,
                     fontWeight: 500,
-                    fontSize: 11,
-                    height: 22,
+                    fontSize: { xs: "0.65rem", sm: "0.7rem", lg: "0.75rem" },
+                    height: { xs: 20, sm: 22, lg: 24 },
                     textTransform: "capitalize",
                     border: "none",
                   }}
@@ -155,10 +190,15 @@ export default function PokemonDetail() {
                   variant="caption"
                   color="text.primary"
                   display="block"
+                  sx={{ fontSize: { xs: "0.7rem", sm: "0.75rem", lg: "0.8rem" } }}
                 >
                   {item.label}
                 </Typography>
-                <Typography variant="body2" fontWeight={500}>
+                <Typography
+                  variant="body2"
+                  fontWeight={500}
+                  sx={{ fontSize: { xs: "0.8rem", sm: "0.9rem", lg: "1rem" } }}
+                >
                   {item.value}
                 </Typography>
               </Grid>
@@ -182,10 +222,15 @@ export default function PokemonDetail() {
           fontWeight={500}
           display="block"
           mb={1.5}
+          sx={{ fontSize: { xs: "1rem", sm: "1.125rem", lg: "1.25rem" } }}
         >
           Base Stats
         </Typography>
-        <Grid container spacing={1} sx={{ mb: 1, '& .MuiGrid-item': { padding: 0 } }}>
+        <Grid
+          container
+          spacing={1}
+          sx={{ mb: 1, "& .MuiGrid-item": { padding: 0 } }}
+        >
           {pokemon.stats.map((s: any) => {
             const statName = s.stat.name;
             const color = STAT_COLORS[statName] || "#888";
@@ -203,7 +248,7 @@ export default function PokemonDetail() {
                       width: 56,
                       flexShrink: 0,
                       textTransform: "uppercase",
-                      fontSize: 10,
+                      fontSize: { xs: "0.6rem", sm: "0.65rem", lg: "0.7rem" },
                     }}
                   >
                     {STAT_LABELS[statName] || statName}
@@ -211,7 +256,12 @@ export default function PokemonDetail() {
                   <Typography
                     variant="caption"
                     fontWeight={500}
-                    sx={{ width: 28, textAlign: "right", flexShrink: 0 }}
+                    sx={{
+                      width: 28,
+                      textAlign: "right",
+                      flexShrink: 0,
+                      fontSize: { xs: "0.65rem", sm: "0.7rem", lg: "0.75rem" },
+                    }}
                   >
                     {s.base_stat}
                   </Typography>
@@ -251,6 +301,7 @@ export default function PokemonDetail() {
           fontWeight={500}
           display="block"
           mb={1}
+          sx={{ fontSize: { xs: "1rem", sm: "1.125rem", lg: "1.25rem" } }}
         >
           Abilities
         </Typography>
@@ -264,7 +315,7 @@ export default function PokemonDetail() {
               size="small"
               variant="outlined"
               sx={{
-                fontSize: 12,
+                fontSize: { xs: "0.7rem", sm: "0.75rem", lg: "0.8rem" },
                 textTransform: "capitalize",
                 color: a.is_hidden ? "text.secondary" : "text.primary",
               }}
@@ -288,6 +339,7 @@ export default function PokemonDetail() {
           fontWeight={500}
           display="block"
           mb={1}
+          sx={{ fontSize: { xs: "1rem", sm: "1.125rem", lg: "1.25rem" } }}
         >
           Sprites
         </Typography>
@@ -310,6 +362,7 @@ export default function PokemonDetail() {
                     variant="caption"
                     color="text.secondary"
                     display="block"
+                    sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem", lg: "0.75rem" } }}
                   >
                     {sprite.label}
                   </Typography>
@@ -329,9 +382,19 @@ export default function PokemonDetail() {
             mb: 1.5,
           }}
         >
-          <Typography variant="h6" color="text.primary" fontWeight={500}>
+          <Typography
+            variant="h6"
+            color="text.primary"
+            fontWeight={500}
+            sx={{ fontSize: { xs: "1rem", sm: "1.125rem", lg: "1.25rem" } }}
+          >
             Moves{" "}
-            <Typography component="span" variant="h6" color="text.disabled">
+            <Typography
+              component="span"
+              variant="h6"
+              color="text.disabled"
+              sx={{ fontSize: { xs: "1rem", sm: "1.125rem", lg: "1.25rem" } }}
+            >
               ({filteredMoves.length})
             </Typography>
           </Typography>
@@ -349,14 +412,21 @@ export default function PokemonDetail() {
             }}
             sx={{
               width: 160,
-              "& .MuiInputBase-root": { fontSize: 12, height: 32 },
+              "& .MuiInputBase-root": {
+                fontSize: { xs: "0.75rem", sm: "0.8rem", lg: "0.875rem" },
+                height: 32,
+              },
               "& .MuiOutlinedInput-input": { py: 0.5 },
             }}
           />
         </Box>
 
         {filteredMoves.length === 0 ? (
-          <Typography variant="body2" color="text.disabled" sx={{ py: 1 }}>
+          <Typography
+            variant="body2"
+            color="text.disabled"
+            sx={{ py: 1, fontSize: { xs: "0.8rem", sm: "0.875rem", lg: "0.95rem" } }}
+          >
             no moves found
           </Typography>
         ) : (
@@ -376,8 +446,8 @@ export default function PokemonDetail() {
                 label={move}
                 size="small"
                 sx={{
-                  fontSize: 11,
-                  height: 24,
+                  fontSize: { xs: "0.65rem", sm: "0.7rem", lg: "0.75rem" },
+                  height: { xs: 22, sm: 24, lg: 26 },
                   textTransform: "capitalize",
                   bgcolor: "action.hover",
                   color: "text.primary",

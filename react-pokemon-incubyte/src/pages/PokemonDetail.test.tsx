@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -98,7 +98,8 @@ describe("PokemonDetail", () => {
 
     test("renders pokemon name", () => {
       const img = screen.getByAltText("charmeleon");
-      expect(screen.getByText("charmeleon")).toBeInTheDocument();
+      const toolbar = screen.getByRole("banner");
+      expect(within(toolbar).getByText("charmeleon")).toBeInTheDocument();
       expect(screen.getByText("#5")).toBeInTheDocument();
       expect(img).toHaveAttribute(
         "src",

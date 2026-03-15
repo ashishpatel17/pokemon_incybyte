@@ -21,7 +21,7 @@ export default function ListItem({ data }: ListItemProps) {
     <>
       <Grid  container spacing={2}>
         {data.map((item) => (
-          <Grid key={item.name} item xs={3}>
+          <Grid key={item.name} item xs={4} md={4} lg={3}>
             <Card
               sx={{ maxWidth: 200, margin: "auto", marginBottom: 2 }}
             >
@@ -62,12 +62,24 @@ function PokemonImage({ name, url }: { name: string; url: string }) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: 140,
+          width: { xs: 300, sm: 300, md: 100, lg: 100 },
+          height: {xs: 240, sm: 240, md: 100, lg: 100   },
         }}
       >
         <CircularProgress size={24} />
       </Box>
     );
 
-  return <CardMedia component="img" height="140" image={img} alt={name} />;
+  return (
+    <CardMedia
+      component="img"
+      image={img}
+      alt={name}
+      sx={{
+        width: { xs: 300, sm: 300, md: "100%", lg: "100%" },
+        height: { xs: 240, sm: 240, md: 100, lg: 100  },
+        objectFit: "contain",
+      }}
+    />
+  );
 }
