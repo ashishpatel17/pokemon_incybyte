@@ -4,7 +4,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 import { useEffect, useState } from "react";
-import { CircularProgress, Grid } from "@mui/material";
+import { Box, CircularProgress, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 
 interface PokemonItem {
   name: string;
@@ -20,12 +21,11 @@ export default function ListItem({ data }: ListItemProps) {
     <>
       <Grid  container spacing={2}>
         {data.map((item) => (
-          <Grid item xs={3}>
+          <Grid key={item.name} item xs={3}>
             <Card
-              key={item.name}
               sx={{ maxWidth: 200, margin: "auto", marginBottom: 2 }}
             >
-              <CardActionArea>
+              <CardActionArea component={Link} to={`/detail/${item.url.split('/').filter(Boolean).pop()}`}>
                 <PokemonImage name={item.name} url={item.url} />
                 <CardContent>
                   <Typography gutterBottom variant="h6" component="div">
@@ -44,15 +44,30 @@ export default function ListItem({ data }: ListItemProps) {
 function PokemonImage({ name, url }: { name: string; url: string }) {
   const [img, setImg] = useState("");
   useEffect(() => {
-    async function fetchImg() {
+    const timeoutId = setTimeout(async () => {
       try {
         const res = await fetch(url);
         const data = await res.json();
         setImg(data.sprites.front_default);
-      } catch {}
-    }
-    fetchImg();
+      } catch (error) {
+        console.error(error);
+      }
+    }, 1000); // debounce delay
+    return () => clearTimeout(timeoutId);
   }, [url]);
-  if (!img) return <CircularProgress size={24} />;
+  if (!img)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: 140,
+        }}
+      >
+        <CircularProgress size={24} />
+      </Box>
+    );
+
   return <CardMedia component="img" height="140" image={img} alt={name} />;
 }
