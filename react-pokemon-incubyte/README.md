@@ -2,14 +2,15 @@
 # React MUI AI Project
 
 ## Deployed at
-    https://main.dgsyji129xf35.amplifyapp.com/
+https://main.dgsyji129xf35.amplifyapp.com/
 
 ## Screenshot
-    ![alt text](image.png)
 
-    ![alt text](image-1.png)
+![alt text](image.png)
 
-    ![alt text](image-2.png)
+![alt text](image-1.png)
+
+![alt text](image-2.png)
 
 ## Prerequisites
 
