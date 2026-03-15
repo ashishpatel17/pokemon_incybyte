@@ -74,7 +74,7 @@ describe("PokemonList", () => {
     await screen.findByText("pikachu1");
     const pagination = await screen.findByRole("navigation");
     const pageOne = within(pagination).getByRole("button", {
-      name: "1",
+      name: /page 1/i,
     });
     expect(pageOne).toBeInTheDocument();
   });
