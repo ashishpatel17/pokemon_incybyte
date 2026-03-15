@@ -193,7 +193,7 @@ GitHub Copilot was used as a development accelerator across coding, testing, and
 	- Accelerated iteration for responsive layout and component-level styling refinements.
 
 3. Human validation and ownership
-    - Identify and write the unit tests first, and then implement the functionality to satisfy those tests.
+    - Identify & write the unit tests first, and then implement the functionality to satisfy those tests.
 	- API contract assumptions and business behavior were manually reviewed.
 	- Build and deployment configuration were manually verified.
 	- Code suggestions were edited where needed for readability, correctness, and project fit.
