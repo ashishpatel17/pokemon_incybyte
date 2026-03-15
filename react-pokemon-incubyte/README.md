@@ -1,6 +1,16 @@
 
 # React MUI AI Project
 
+## Deployed at
+    https://main.dgsyji129xf35.amplifyapp.com/
+
+## Screenshot
+    ![alt text](image.png)
+
+    ![alt text](image-1.png)
+
+    ![alt text](image-2.png)
+
 ## Prerequisites
 
 - Node.js 20 or higher
