@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import { vi, beforeEach, afterEach } from "vitest";
 import PokemonList from "./PokemonList";
 import { Provider } from "react-redux";
@@ -20,17 +20,21 @@ describe("PokemonList", () => {
             () =>
               resolve({
                 data: {
-                  count: 2,
-                  results: [
-                    { name: "pikachu", url: "url1" },
-                    { name: "bulbasaur", url: "url2" },
-                  ],
+                  count: 60,
+                  results: Array.from({ length: 60 }, (_, i) => ({
+                    name: `pikachu${i + 1}`,
+                    url: `url${i + 1}`,
+                  })),
                 },
               }),
             100,
           ),
         ),
     );
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   test("should render pokemon list heading", () => {
@@ -57,7 +61,21 @@ describe("PokemonList", () => {
         <PokemonList />
       </Provider>,
     );
-    const pokemon = await screen.findByText("pikachu");
+    const pokemon = await screen.findByText("pikachu1");
     expect(pokemon).toBeInTheDocument();
+  });
+
+  it("should show pagination", async () => {
+    render(
+      <Provider store={store}>
+        <PokemonList />
+      </Provider>,
+    );
+    await screen.findByText("pikachu1");
+    const pagination = await screen.findByRole("navigation");
+    const pageOne = within(pagination).getByRole("button", {
+      name: "1",
+    });
+    expect(pageOne).toBeInTheDocument();
   });
 });
