@@ -4,6 +4,7 @@ import PokemonList from "./PokemonList";
 import { Provider } from "react-redux";
 import { store } from "../state/store";
 import axios from "axios";
+import userEvent from "@testing-library/user-event";
 
 vi.mock("axios", () => ({
   default: {
@@ -13,6 +14,13 @@ vi.mock("axios", () => ({
 
 describe("PokemonList", () => {
   beforeEach(() => {
+    (global as any).fetch = vi.fn(() =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({ sprites: { front_default: "image-url" } }),
+      }),
+    );
+
     (axios.get as any).mockImplementation((url: string) => {
       return new Promise((resolve) =>
         setTimeout(() => {
@@ -22,7 +30,7 @@ describe("PokemonList", () => {
                 count: 60,
                 results: Array.from({ length: 60 }, (_, i) => ({
                   name: `pikachu${i + 1}`,
-                  url: `url${i + 1}`,
+                  url: `https://pokeapi.co/${i + 1}`,
                 })),
               },
             });
@@ -30,23 +38,24 @@ describe("PokemonList", () => {
             resolve({
               data: {
                 results: [
-                  { name: "normal" },
-                  { name: "fire" },
-                  { name: "grass" },
-                  { name: "ice" },
+                  { name: "normal", url: "url/normal" },
+                  { name: "fire", url: "url/fire" },
+                  { name: "grass", url: "url/grass" },
+                  { name: "ice", url: "url/ice" },
                 ],
               },
             });
           } else {
             resolve({ data: {} });
           }
-        }, 100)
+        }, 100),
       );
     });
   });
 
   afterEach(() => {
     vi.clearAllMocks();
+    delete (global as any).fetch;
   });
 
   test("should render pokemon list heading", () => {
@@ -112,31 +121,36 @@ describe("PokemonList", () => {
     (axios.get as any).mockImplementation((url: string) => {
       return new Promise((resolve) =>
         setTimeout(() => {
-          if (url.includes("/type")) {
-            if (url.includes("/type/fire")) {
-              resolve({
-                data: {
-                  pokemon: [
-                    { pokemon: { name: "charmander", url: "url" } }
-                  ]
-                }
-              });
-            } else {
-              resolve({
-                data: {
-                  results: [
-                    { name: "normal" },
-                    { name: "fire" },
-                    { name: "grass" },
-                    { name: "ice" },
-                  ],
-                },
-              });
-            }
+          if (url.includes("/type/10")) {
+            resolve({
+              data: {
+                pokemon: [{ pokemon: { name: "charmander", url: "url" } }],
+              },
+            });
+          } else if (url.includes("/type")) {
+            resolve({
+              data: {
+                results: [
+                  { name: "normal", url: "https://pokeapi.co/api/v2/type/1/" },
+                  { name: "fire", url: "https://pokeapi.co/api/v2/type/10/" },
+                  { name: "grass", url: "https://pokeapi.co/api/v2/type/12/" },
+                  { name: "ice", url: "https://pokeapi.co/api/v2/type/15/" },
+                ],
+              },
+            });
+          } else {
+            // handle initial pokemon list fetch
+            resolve({
+              data: {
+                results: [{ name: "pikachu1", url: "url/pikachu1" }],
+              },
+            });
           }
-        }, 100)
+        }, 100),
       );
     });
+
+    const user = userEvent.setup();
 
     render(
       <Provider store={store}>
@@ -145,10 +159,10 @@ describe("PokemonList", () => {
     );
 
     await screen.findByText("pikachu1");
+
     const select = screen.getByRole("combobox", { name: /pokemon type/i });
-    fireEvent.mouseDown(select);
-    const fireOption = screen.getByText("fire");
-    fireEvent.click(fireOption);
+    await user.click(select);
+    await user.click(screen.getByText("fire"));
 
     await screen.findByText("charmander");
     expect(screen.getByText("charmander")).toBeInTheDocument();
